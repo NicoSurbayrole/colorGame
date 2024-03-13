@@ -26,16 +26,20 @@ for (let i = 0; i < square.length; i++) {
 for (let i = 0; i < square.length; i++) {
   square[i].addEventListener("click", () => {
     let validarColor = square[i].style.background === `rgb(${pickedColor})`;
-    if (validarColor) {
-      for (cuadrado of square) {
-        cuadrado.style.background = square[i].style.background;
-      }
-      stripe.style.background = square[i].style.background;
-      titulo.style.color = square[i].style.background;
-      mensaje.textContent = "El color es correcto";
-    } else {
-      square[i].style.background = "#232323";
-      mensaje.textContent = "El color es incorrecto";
-    }
+    validarColorGanador(validarColor, i)
   });
+}
+
+function validarColorGanador(validarColor, i){
+    if (validarColor) {
+        for (cuadrado of square) {
+          cuadrado.style.background = square[i].style.background;
+        }
+        stripe.style.background = square[i].style.background;
+        titulo.style.color = square[i].style.background;
+        mensaje.textContent = "El color es correcto";
+      } else {
+        square[i].style.background = "#232323";
+        mensaje.textContent = "El color es incorrecto";
+      }
 }
