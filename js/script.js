@@ -1,45 +1,208 @@
-let colors = [
-  "240, 14, 128",
-  "140, 124, 250",
-  "100, 100, 128",
-  "0, 124, 148",
-  "20, 124, 10",
-  "20, 224, 200",
-];
-let pickedColor = randomColor();
+let pickedColor;
+let colors = [];
+let modo = 6;
 let square = document.querySelectorAll(".square");
 let titulo = document.querySelector("#h1");
 let mensaje = document.querySelector("#message");
 let navb = document.querySelector("#stripe");
 let colorGanador = document.querySelector("#colorDisplay");
-colorGanador.textContent = pickedColor;
+let modoFacil = document.querySelector("#easy");
+let modoDificil = document.querySelector("#hard");
+let reset = document.querySelector("#reset")
 
-function randomColor() {
-  let colorPoition = Math.random() * colors.length;
-  return colors[Math.floor(colorPoition)];
-}
 
-for (let i = 0; i < square.length; i++) {
-  square[i].style.background = `rgb(${colors[i]})`;
-}
+randomColor(6);
 
 for (let i = 0; i < square.length; i++) {
   square[i].addEventListener("click", () => {
-    let validarColor = square[i].style.background === `rgb(${pickedColor})`;
-    validarColorGanador(validarColor, i)
+    let validarColor = square[i].style.background === pickedColor;
+    validarColorGanador(validarColor, i);
   });
 }
 
-function validarColorGanador(validarColor, i){
+function validarColorGanador(validarColor, i) {
     if (validarColor) {
-        for (cuadrado of square) {
-          cuadrado.style.background = square[i].style.background;
-        }
-        stripe.style.background = square[i].style.background;
-        titulo.style.color = square[i].style.background;
-        mensaje.textContent = "El color es correcto";
-      } else {
-        square[i].style.background = "#232323";
-        mensaje.textContent = "El color es incorrecto";
+      for (cuadrado of square) {
+        cuadrado.style.background = square[i].style.background;
       }
+      stripe.style.background = square[i].style.background;
+      titulo.style.color = square[i].style.background;
+      mensaje.textContent = "El color es correcto!";
+    } else {
+      square[i].style.background = "#232323";
+      mensaje.textContent = "El color es incorrecto";
+    }
+  }
+
+function randomColor(num) {
+    for (let i = 0; i < num; i++) {
+      let r = Math.floor(Math.random() * 255).toString();
+      let g = Math.floor(Math.random() * 255);
+      let b = Math.floor(Math.random() * 255);
+      colors.push("rgb(" + r + ", " + g + ", " + b + ")");
+    }
+    selectMode(num);
+    pickedColor = selectColor();
+    colorGanador.textContent = pickedColor;
+  }
+
+function selectMode(num) {
+  if (num === 6) {
+    cargarColores(num);
+    for (let i = 3; i < square.length; i++) {
+      square[i].style.display = "";
+    }
+  } else {
+    cargarColores(num);
+    for (let i = 3; i < square.length; i++) {
+      square[i].style.display = "none";
+    }
+  }
 }
+
+function cargarColores(num) {
+  for (let i = 0; i < num; i++) {
+    square[i].style.background = colors[i];
+  }
+}
+
+function selectColor() {
+  let colorPosition = Math.random() * colors.length;
+  return colors[Math.floor(colorPosition)];
+}
+
+
+
+modoFacil.addEventListener("click", () => {
+  modo = 3;
+  colors = [];
+  if(!modoFacil.classList.value){
+    modoDificil.classList.toggle("selected")
+    modoFacil.classList.toggle("selected")
+}
+  randomColor(modo);
+  console.log(modo);
+});
+
+modoDificil.addEventListener("click", () => {
+  modo = 6;
+  colors = [];
+  if(!modoDificil.classList.value){
+    modoDificil.classList.toggle("selected")
+    modoFacil.classList.toggle("selected")
+}
+  randomColor(modo);
+  console.log(modo);
+});
+
+reset.addEventListener("click", () =>{
+   console.log(modoDificil.classList.value)
+    if(!modoDificil.classList.value){
+        modoDificil.classList.toggle("selected")
+        modoFacil.classList.toggle("selected")
+    }
+    mensaje.textContent = ""
+    navb.style.background = "#fff"
+    titulo.style.color = "#fff"
+    colors = [];
+    randomColor(6)
+})
+
+
+
+
+// ____________________________________________________________________________
+
+// var numSquares=6
+// var colors=[]
+// var pickedColor
+// var squares=document.querySelectorAll(".square")
+// var colorDisplay=document.getElementById("colorDisplay")
+// var messageDisplay= document.querySelector("#message")
+// var h1= document.querySelector("h1")
+// var resetBtn=document.querySelector("#reset")
+// var modeBtn= document.querySelectorAll(".mode")
+
+// init()
+
+// function init(){
+//   setUpModeBtns()
+//   setUpSquares()
+//   reset()
+// }
+
+// function setUpModeBtns(){
+// for (var i = 0; i < modeBtn.length; i++) {
+// modeBtn[i].addEventListener("click", function(){
+//   modeBtn[0].classList.remove("selected")
+//   modeBtn[1].classList.remove("selected")
+//   this.classList.add("selected")
+//     numSquares= (this.textContent==="Easy")?3:6
+//   reset()
+// })
+// }
+// }
+
+// function setUpSquares(){
+// for (var i = 0; i < squares.length; i++) {
+// squares[i].addEventListener("click", function(){
+//   var clickedColor=this.style.background
+//   if(clickedColor===pickedColor){
+//     messageDisplay.textContent="Correct!"
+//     resetBtn.textContent="Play Again!"
+//     changeColors(clickedColor)
+//     h1.style.background=clickedColor
+//   }else{
+//     this.style.background="#232323"
+//     messageDisplay.textContent="Try Again"
+//   }
+// })
+// }
+// }
+
+// function reset(){
+//   colors= generateRandomColors(numSquares)
+//   pickedColor=pickColor()
+//   colorDisplay.textContent=pickedColor
+//   for (var i = 0; i < squares.length; i++) {
+//     if(colors[i]){
+//     squares[i].style.background=colors[i]
+//     squares[i].style.display="block"
+//   }else{
+//     squares[i].style.display="none"
+//   }
+//   }
+//   h1.style.background="steelblue"
+//   messageDisplay.textContent=""
+//   resetBtn.textContent="New Colors"
+// }
+
+// resetBtn.addEventListener("click", function(){
+//   reset()
+// })
+
+// function changeColors(color){
+//   for (var i = 0; i < squares.length; i++) {
+//     squares[i].style.background=color
+//   }
+// }
+
+// function pickColor(){
+//   var random=Math.floor(Math.random()*colors.length)
+//   return colors[random]
+// }
+// function generateRandomColors(num){
+//   var arr=[]
+//   for (var i = 0; i <num ; i++) {
+//     arr[i]=randomColor()
+//   }
+//   return arr
+// }
+
+// function randomColor(){
+//   var r=Math.floor(Math.random()*256)
+//   var b=Math.floor(Math.random()*256)
+//   var g=Math.floor(Math.random()*256)
+//   return "rgb("+r+", "+g+", "+b+")"
+
+// }
